@@ -1,0 +1,10 @@
+spring:
+  thymeleaf:
+    cache: false
+  jpa:
+    show-sql: true
+  h2:
+    console:
+      path: /h2
+  datasource:
+    url: jdbc:h2:mem:padaria
