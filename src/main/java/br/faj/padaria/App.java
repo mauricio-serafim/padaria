@@ -10,10 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.faj.padaria.domain.model.Categoriaproduto;
 import br.faj.padaria.domain.model.Permissao;
+import br.faj.padaria.domain.model.Produto;
 import br.faj.padaria.domain.model.Unidade;
 import br.faj.padaria.domain.model.Usuario;
 import br.faj.padaria.persistence.repository.CategoriaprodutoRepository;
 import br.faj.padaria.persistence.repository.PermissaoRepository;
+import br.faj.padaria.persistence.repository.ProdutoRepository;
 import br.faj.padaria.persistence.repository.UnidadeRepository;
 import br.faj.padaria.persistence.repository.UsuarioRepository;
 
@@ -26,6 +28,9 @@ public class App {
 
 	@Autowired
 	private CategoriaprodutoRepository categoriaprodutoRepository;
+
+	@Autowired
+	private ProdutoRepository produtoRepository;
 
 	@Autowired
 	private PermissaoRepository permissaoRepository;
@@ -49,10 +54,31 @@ public class App {
 
 		Categoriaproduto bebida = new Categoriaproduto("B", "Bebida");
 		Categoriaproduto lanche = new Categoriaproduto("L", "Lanche");
-		categoriaprodutoRepository.saveAll(Arrays.asList(bebida, lanche));
-		
+		Categoriaproduto pao = new Categoriaproduto("P", "Pão francês");
+		categoriaprodutoRepository.saveAll(Arrays.asList(bebida, lanche, pao));
+
 		Unidade kg = new Unidade("kg", "quilograma");
 		Unidade un = new Unidade("un", "Unidade");
 		unidadeRepository.saveAll(Arrays.asList(kg, un));
+
+		Produto cocacola = new Produto("B0101", "Coca Cola 350mL");
+		cocacola.setGtin("C123678389024");
+		cocacola.setCategoria(bebida);
+		cocacola.setComercializavel(true);
+		cocacola.setUnidade(un);
+		cocacola.setVendaLiberada(false);
+		Produto xsalada = new Produto("L0101", "X Salada");
+		xsalada.setGtin("L028376537289");
+		xsalada.setCategoria(lanche);
+		xsalada.setComercializavel(true);
+		xsalada.setUnidade(un);
+		xsalada.setVendaLiberada(true);
+		Produto paof = new Produto("P0112", "Pão francês");
+		paof.setGtin("P876534210231");
+		paof.setCategoria(pao);
+		paof.setComercializavel(true);
+		paof.setUnidade(kg);
+		paof.setVendaLiberada(true);
+		produtoRepository.saveAll(Arrays.asList(cocacola, xsalada, paof));
 	}
 }

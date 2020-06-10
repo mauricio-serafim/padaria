@@ -5,20 +5,25 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import br.faj.padaria.domain.model.Categoriaproduto;
+import br.faj.padaria.domain.model.Produto;
 import br.faj.padaria.persistence.repository.CategoriaprodutoRepository;
+import br.faj.padaria.persistence.repository.ProdutoRepository;
 
 @Controller
 public class MainController {
 
 	@Autowired
 	private CategoriaprodutoRepository categoriaprodutoRepository;
+
+	@Autowired
+	private ProdutoRepository produtoRepository;
 
 	/***
 	 * ESSE MÉTODO CARREGA A PÁGINA(index.html) DE LOGIN DA NOSSA APLICAÇÃO
@@ -74,7 +79,27 @@ public class MainController {
 		return "estoque/index";
 	}
 
-	public List<Categoriaproduto> listaCategoriaproduto() {
-		return categoriaprodutoRepository.findAll();
+	@ResponseBody
+	@GetMapping("/lista")
+	public List<Produto> listaproduto() {
+		List<Produto> produtos = produtoRepository.findAll();
+
+		return produtos;
+	}
+
+	@GetMapping("/habilitavenda/{id}")
+	public void habilitavenda(@PathVariable Long id) {
+		Produto produto = produtoRepository.findById(id).orElse(null);
+
+		produto.setVendaLiberada(true);
+		produtoRepository.save(produto);
+	}
+
+	@GetMapping("/desabilitavenda/{id}")
+	public void desabilitavenda(@PathVariable Long id) {
+		Produto produto = produtoRepository.findById(id).orElse(null);
+
+		produto.setVendaLiberada(false);
+		produtoRepository.save(produto);
 	}
 }

@@ -53,5 +53,80 @@
 		      </ul>
 		    </div>
 		</nav>
+
+		<div class="container white">
+			<a href="#!" class="btn" id="loadProdutos">Carregar produtos</a>
+			<table class="striped" id="tb">
+				<thead>
+					<tr>
+						<th>Código</th>
+						<th>Descrição</th>
+						<th>GTIN</th>
+						<th>Unidade</th>
+						<th>Categoria</th>
+						<th>Comercializável</th>
+						<th>Venda liberada</th>
+					</tr>
+				</thead>
+				<tbody id="corpo"></tbody>
+			</table>
+		</div>
+
+		<script type="text/javascript" th:src="@{jquery/jquery-3.5.1.min.js}"></script>
+		<script type="text/javascript" th:src="@{materialize/js/materialize.min.js}"></script>
+
+		<script type="text/javascript">
+			var listaProdutos;
+
+			$().ready(function(){
+				$("#loadProdutos").on("click", function(){
+					data = "";
+
+					$.get("/lista", function(data){
+								listaProdutos = data;
+								makeTable(data);
+							});
+					
+					return false;
+				});
+			});
+			
+			function desabilitavenda(codigo){
+				var url = "/desabilitavenda/" + codigo;
+				console.log(url);
+
+				$.get(url);
+				
+				return false;
+			}
+			
+			function habilitavenda(codigo) {
+				var url = "/habilitavenda/" + codigo;
+				console.log(url);
+
+				$.get(url);
+				
+				return false;
+			}
+
+			function makeTable(data){
+				data.forEach(linha => {
+					var str = "";
+					str += "<td>" + linha.codigo + "</td>";
+					str += "<td>" + linha.descricao + "</td>";
+					str += "<td>" + linha.gtin +"</td>";
+					str += "<td>" + linha.unidade.nome + "</td>";
+					str += "<td>" + linha.categoria.nome + "</td>";
+					str += linha.comercializavel ? "<td><i class=\"fas fa-check green-text\"></i></td>" : "<td><i class=\"fas fa-times red-text\"></i></td>";
+					str += linha.vendaLiberada ? "<td><a href=\"#!\" onclick=\"desabilitavenda(" + linha.id + ")\"><i class=\"fas fa-check green-text\"></i></a></td>" : "<td><a href=\"#!\" onclick=\"habilitavenda(" + linha.id + ")\"><i class=\"fas fa-times red-text\"></i></a></td>";
+
+					str = "<tr>" + str + "</tr>";
+					
+					console.log(str);
+
+					$("#corpo").append(str);
+				});
+			}
+		</script>
 	</body>
 </html>
