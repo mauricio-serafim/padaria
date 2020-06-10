@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import br.faj.padaria.domain.model.Categoriaproduto;
 import br.faj.padaria.domain.model.Permissao;
+import br.faj.padaria.domain.model.Unidade;
 import br.faj.padaria.domain.model.Usuario;
+import br.faj.padaria.persistence.repository.CategoriaprodutoRepository;
 import br.faj.padaria.persistence.repository.PermissaoRepository;
+import br.faj.padaria.persistence.repository.UnidadeRepository;
 import br.faj.padaria.persistence.repository.UsuarioRepository;
 
 @SpringBootApplication
@@ -21,10 +25,16 @@ public class App {
 	}
 
 	@Autowired
-	PermissaoRepository permissaoRepository;
+	private CategoriaprodutoRepository categoriaprodutoRepository;
 
 	@Autowired
-	UsuarioRepository usuarioRepository;
+	private PermissaoRepository permissaoRepository;
+
+	@Autowired
+	private UnidadeRepository unidadeRepository;
+
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@PostConstruct
 	public void init() {
@@ -36,5 +46,13 @@ public class App {
 				"ROLE_CONSULTA_USUARIO");
 		Permissao role_admin = new Permissao("ROLE_ADMIN", "Admimnistrador", "ROLE_ADMIN");
 		permissaoRepository.saveAll(Arrays.asList(role_cadastro_usuario, role_consulta_usuario, role_admin));
+
+		Categoriaproduto bebida = new Categoriaproduto("B", "Bebida");
+		Categoriaproduto lanche = new Categoriaproduto("L", "Lanche");
+		categoriaprodutoRepository.saveAll(Arrays.asList(bebida, lanche));
+		
+		Unidade kg = new Unidade("kg", "quilograma");
+		Unidade un = new Unidade("un", "Unidade");
+		unidadeRepository.saveAll(Arrays.asList(kg, un));
 	}
 }

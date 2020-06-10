@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+	<head>
+		<link rel="stylesheet" type="text/css" th:href="@{fontawesome/css/all.min.css}">
+		<link rel="stylesheet" type="text/css" th:href="@{materialize/css/materialize.min.css}">
+		<style>
+			body {
+				display: flex;
+				min-height: 100vh;
+				flex-direction: column;
+			}
+			main {
+				flex: 1 0 auto;
+			}
+			body {
+				background: #fff;
+			}
+			#fundo-externo {
+			    overflow: hidden; /* para que não tenha rolagem se a imagem de fundo for maior que a tela */
+			    width: 100%;
+			    height: 100%;
+			    position: absolute; /* criamos um contexto para posicionamento */
+			    z-index: -1000;
+			}
+			#fundo {
+			    position: absolute; /* posição fixa para que a possível rolagem da tela não revele espaços em branco */
+			    width: 100%;
+			    height: 100%;
+			}
+			#fundo img {
+			    width: 100%; /* com isso imagem ocupará toda a largura da tela. Se colocarmos height: 100% também, a imagem irá distorcer */
+			    position: absolute;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div id="fundo-externo">
+		    <div id="fundo">
+		        <img src="/img/background.jpg" alt="" />
+		    </div>
+		</div>
+		
+		<nav>
+		    <div class="nav-wrapper black">
+		      <a href="#" class="brand-logo right"><img src="/img/logo.png"></a>
+		      <ul id="nav-mobile" class="left hide-on-med-and-down">
+		        <li><a href="/vendas">Realizar vendas</a></li>
+		        <li><a href="/estoque">Estoque</a></li>
+		        <li><a href="/usuarios">Cadastrar usuários</a></li>
+		        <li><a href="/">Sair</a></li>
+		      </ul>
+		    </div>
+		</nav>
+
+		<div class="container white">
+			<div class="row">
+				<div class="col s9">
+					<table class="responsive-table striped">
+						<thead>
+							<tr>
+								<th>Código</th>
+								<th>Descrição</th>
+								<th>Quantidade</th>
+								<th>Valor Unit.</th>
+								<th>Valor Total</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>B0101</td>
+								<td>Coca Cola lata 350mL</td>
+								<td>3 <label class="right"><i class="fas fa-minus">&nbsp;</i><i class="fas fa-plus"></i></label></td>
+								<td class="text-right">3,00</td>
+								<td>9,00</td>
+								<td><i class="fas fa-times"></i></td>
+							</tr>
+							<tr>
+								<td>L0101</td>
+								<td>X Salada</td>
+								<td>1 <label class="right"><i class="fas fa-minus">&nbsp;</i><i class="fas fa-plus"></i></td>
+								<td>7,00</td>
+								<td>7,00</td>
+								<td><i class="fas fa-times"></i></td>
+							</tr>
+							<tr>
+								<td>P0112</td>
+								<td>Pão francês</td>
+								<td>0,5 kg</td>
+								<td>14,00</td>
+								<td>7,00</td>
+								<td><i class="fas fa-times"></i></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col s3">
+					<form>
+						<div class="input-field">
+							<input id="pesquisar_produto" type="text" class="validate">
+							<label for="pesquisar_produto">Pesquisar produto</label>	
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s6 center"><a href="#">Finalizar venda</a></div>
+				<div class="col s6 center"><a href="#">Nova venda</a></div>
+			</div>
+			<div class="row center">
+				<div class="col input-field s4">
+					<input class="validate" id="valor_total" type="text" value="23.00">
+					<label for="valor_total">Total (R$)</label>
+				</div>
+				<div class="col input-field s4">
+					<input class="validate" id="valor_pago" type="text">
+					<label for="valor_pago">Valor pago (R$)</label>
+				</div>
+				<div class="col input-field s4">
+					<input class="validate" id="valor_troco" type="text" value="0.00">
+					<label for="valor_troco">Troco (R$)</label>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" th:src="@{jquery/jquery-3.5.1.min.js}"></script>
+		<script type="text/javascript" th:src="@{materialize/js/materialize.min.js}"></script>
+
+		<script type="text/javascript">
+			$().ready(function(){
+				var valorTotal = $("#valor_total");
+				var valorPago = $("#valor_pago");
+				var valorTroco = $("#valor_troco");
+
+				valorPago.on("blur", function(){
+					if (valorPago.val()>0){
+						if (valorPago.val() < valorTotal.val()){
+							$(".modal").modal("open"); 
+						} else {
+							valorTroco.val(valorPago.val() - valorTotal.val());
+						}
+					}
+				});
+				
+				M.AutoInit();
+			});
+		</script>
+
+		<!-- Modal Structure -->
+		<div id="modall" class="modal bottom-sheet">
+			<div class="modal-content">
+				<h4>Atenção</h4>
+				<p>Valor pago inferior ao valor da compra</p>
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-green btn-flat">Ok</a>
+			</div>
+		</div>
+	</body>
+</html>

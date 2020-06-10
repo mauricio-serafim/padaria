@@ -27,7 +27,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http
 			.authorizeRequests()
-				.anyRequest().permitAll();
+				.anyRequest()
+				.permitAll();
+
 //		http.authorizeRequests()
 //		/*DETERMINA QUE PARA REALIZAR ESSA REQUEST PRECISA TER UMA DAS PERMISSÕES ABAIXO
 //	 	* EXEMPLO DA URL: http://localhost:8095/usuario/novoCadastro
